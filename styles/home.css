@@ -1,0 +1,83 @@
+.home{
+  padding:0 7vw;
+}
+.background-picture{
+  height:550px;
+  margin-top:55px;
+  width: 100vw;
+}
+.home-icon{
+  height:550px;
+  width:auto;
+}
+.main-slide{
+  display:flex;
+  align-items: center;
+  flex-wrap: wrap-reverse;
+}
+.main-slide div:nth-child(2){
+  flex:1;
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+.main-slide div:nth-child(1){
+  padding-top:20px;
+  flex:1;
+  font-size: 30px;
+}
+.main-slide div:nth-child(1) p{
+  font-size: 18px;
+  padding:20px 0;
+  line-height: 24px;
+}
+.main-slide div:nth-child(1) span{
+  color:rgb(211, 46, 46);
+}
+.food-items{
+  margin:70px 0;
+  padding:20px 0;
+  background-color:beige;
+  border-radius: 30px;
+  display:flex;
+  justify-content: space-around;
+  flex-wrap:wrap;
+}
+.item{
+  width: 250px;
+  padding:20px;
+  text-align: center;
+  position: relative;
+}
+.item div{
+  height: 160px;
+}
+.item img{
+  width:160px;
+  margin-bottom: 15px;
+}
+.item p{
+  font-size: 12px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  line-height: 18px;
+}
+.item .white_btn{
+  width:120px;
+  line-height: 35px;
+
+}
+.white_btn{
+  cursor:pointer; 
+  margin-top: 20px;
+  width:160px;
+  font-weight: bold;
+  color:rgb(253,77,8);
+  line-height: 50px;
+}
+.white_btn:hover{
+  background-color: rgb(253,77,8);
+  color:white;
+  border-radius: 6px;
+  cursor: pointer;
+}
