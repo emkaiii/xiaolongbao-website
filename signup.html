@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --color-clifford: #da373d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background bg-white flex justify-center h-screen">
+      <img class="background-picture object-fit" src="header/background.png" />
+    </div>
+    <div
+      class="fixed w-full h-screen top-0 flex justify-center items-center bg-black opacity-[20%]"
+    ></div>
+    <div class="fixed w-full h-screen top-0 flex justify-center items-center">
+      <div
+        class="bg-white h-[760px] w-[600px] rounded-2xl shadow-2xl shadow-black overflow-hidden p-12"
+      >
+        <p class="text-5xl font-bold">Sign up</p>
+        <div class="mt-10">
+          <p class="text-xl">Full name</p>
+          <textarea
+            id="fullname-input"
+            class="border border-2 resize-none w-full py-2 px-2 h-12 text-lg rounded-sm"
+            placeholder="Juan Dela Cruz"
+          ></textarea>
+
+          <p class="text-xl">Contact Number</p>
+          <textarea
+            id="contactno-input"
+            class="border border-2 resize-none w-full py-2 px-2 h-12 text-lg rounded-sm"
+            placeholder="09XXXXXXXXX"
+          ></textarea>
+
+          <p class="text-xl">Address</p>
+          <textarea
+            id="address-input"
+            class="border border-2 resize-none w-full py-2 px-2 h-12 text-lg rounded-sm"
+            placeholder="Address..."
+          ></textarea>
+
+          <p class="text-xl">Email</p>
+          <textarea
+            id="email-input"
+            class="border border-2 resize-none w-full py-2 px-2 h-12 text-lg rounded-sm"
+            placeholder="Email..."
+          ></textarea>
+
+          <p class="text-xl">Password</p>
+          <input
+            id="password-input"
+            type="password"
+            class="border border-2 resize-none w-full py-2 px-2 h-12 text-lg rounded-sm"
+            placeholder="Password..."
+          />
+
+          <button
+            class="relative overflow-hidden flex justify-center items-center w-full h-12 bg-red-800 rounded-sm mt-10 text-white text-2xl font-medium transition-transform duration-150 active:scale-95 group"
+          >
+            <span
+              class="absolute inset-0 bg-black opacity-0 group-hover:opacity-[20%] transition-opacity duration-150"
+            ></span>
+            <span class="relative z-10">Sign Up</span>
+          </button>
+
+          <p class="w-full text-center">or</p>
+          <a href="login.html">
+            <button
+              class="flex justify-center items-center w-full h-12 rounded-sm text-2xl font-medium border border-2 transition-transform duration-150 active:scale-95 group overflow-hidden relative"
+            >
+              <span
+                class="absolute inset-0 bg-black opacity-0 group-hover:opacity-[20%] transition-opacity duration-150"
+              ></span>
+              <span class="relative z-10">Log In</span>
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
