@@ -60,6 +60,7 @@
           />
 
           <button
+            id="signup-button"
             class="relative overflow-hidden flex justify-center items-center w-full h-12 bg-red-800 rounded-sm mt-10 text-white text-2xl font-medium transition-transform duration-150 active:scale-95 group"
           >
             <span
@@ -83,4 +84,42 @@
       </div>
     </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const signupButton = document.getElementById("signup-button");
+
+    signupButton.addEventListener("click", async () => {
+      const fullname = document.getElementById("fullname-input").value;
+      const contactno = document.getElementById("contactno-input").value;
+      const address = document.getElementById("address-input").value;
+      const email = document.getElementById("email-input").value;
+      const password = document.getElementById("password-input").value;
+
+      if (
+        fullname === "" ||
+        contactno === "" ||
+        address === "" ||
+        email === "" ||
+        password === ""
+      ) {
+        alert("Please fill up all fields");
+      }
+
+      const body = { fullname, contactno, address, email, password };
+
+      try {
+        const response = await axios.post(
+          "http://localhost/restapi/api/auth.php?action=signup",
+          body
+        );
+        console.log(response);
+        alert("Signup successful redirecting to login");
+
+        window.location.replace("login.html");
+      } catch (e) {
+        console.log(e);
+        alert(e.response.data.message);
+      }
+    });
+  </script>
 </html>
