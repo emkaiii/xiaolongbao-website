@@ -8,20 +8,210 @@
   </head>
   <body>
     <div class="h-screen w-full overflow-hidden flex p-10">
-      <div class="flex flex-1 h-full p-10">
+      <div class="flex flex-1 flex-col h-full p-10">
         <p class="text-4xl font-bold">Orders</p>
-        <div id="order-list-container"></div>
+        <div id="order-list-container" class="pt-10"></div>
       </div>
 
-      <div class="flex w-[40%] h-full bg-blue-500 mb-10"></div>
+      <div class="flex w-[40%] h-full mb-10 border-l-2 relative p-10 flex-col">
+        <div
+          id="detail-curtain"
+          class="absolute top-0 left-0 w-full h-full bg-white z-20"
+        ></div>
+        <p class="text-4xl font-bold">Details</p>
+        <p class="text-xl font-bold mt-8">
+          Name: <span id="name" class="font-normal">Cotton Buds</span>
+        </p>
+        <p class="text-xl font-bold mt-2">
+          Contact No:
+          <span id="contactno" class="font-normal">09935588670</span>
+        </p>
+        <p class="text-xl font-bold mt-2">
+          Address:
+          <span id="address" class="font-normal"
+            >Anywhere St. Mandaluyong City PH</span
+          >
+        </p>
+        <p class="text-xl font-bold mt-2">
+          Sub Total:
+          <span id="subtotal" class="font-normal">32</span>
+        </p>
+
+        <table
+          class="table-fixed w-full mt-10 border-collapse"
+          id="summary-table"
+        >
+          <thead>
+            <tr>
+              <th class="text-left border border-1">Item Name</th>
+              <th class="text-middle w-10 border border-1">Qty</th>
+              <th class="text-middle w-16 border border-1">Price</th>
+              <th class="text-middle w-16 border border-1">Total</th>
+            </tr>
+          </thead>
+          <tbody id="items-table"></tbody>
+          <tr>
+            <td class="border-x-1 border-b-1"></td>
+            <td class="text-center border-r-1 border-b-1"></td>
+            <td class="text-center border-r-1 border-b-1"></td>
+            <td class="text-center border-r-1 border-b-1"></td>
+          </tr>
+        </table>
+        <div class="h-[200px]">
+          <img id="proof-of-payment" class="object-fit h-full" />
+        </div>
+        <button
+          id="approve-button"
+          class="overflow-hidden flex justify-center items-center h-12 bg-green-400 rounded-sm mt-10 text-white text-2xl font-medium transition-transform duration-150 active:scale-95 group mt-auto relative"
+        >
+          <span
+            class="absolute inset-0 bg-black opacity-0 group-hover:opacity-[20%] transition-opacity duration-150"
+          ></span>
+          <span class="relative z-10 text-black">Approve</span>
+        </button>
+      </div>
     </div>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       async function getOrders() {
-        const response = await axios.get()
+        var response;
+        try {
+          response = await axios.get("http://localhost/restapi/api/orders.php");
+        } catch (e) {
+          alert("Failed to connect to server");
+          console.log(e);
+        }
+
+        const orderListContainer = document.getElementById(
+          "order-list-container"
+        );
+
+        for (const order of response.data) {
+          const orderContainer = document.createElement("div");
+          orderListContainer.appendChild(orderContainer);
+          orderContainer.classList =
+            "flex items-center border-b-2 pb-4 cursor-pointer";
+
+          const orderNumberLabel = document.createElement("p");
+          orderContainer.appendChild(orderNumberLabel);
+          orderNumberLabel.innerHTML = order.orderid;
+          orderNumberLabel.classList = "text-4xl font-bold";
+
+          const customerDetailsContainer = document.createElement("div");
+          customerDetailsContainer.classList = "flex flex-col pl-3";
+          orderContainer.appendChild(customerDetailsContainer);
+
+          const nameLabel = document.createElement("p");
+          customerDetailsContainer.appendChild(nameLabel);
+          customerDetailsContainer.innerHTML = order.fullname;
+          customerDetailsContainer.classList = "text-xl ml-3 font-semibold";
+
+          const addressContactContainer = document.createElement("div");
+          customerDetailsContainer.append(addressContactContainer);
+          addressContactContainer.classList = "flex ";
+
+          const addressLabel = document.createElement("p");
+          addressContactContainer.appendChild(addressLabel);
+          addressLabel.innerHTML = order.address + "  &#9679;  ";
+          addressLabel.classList = "text-sm font-normal";
+
+          const contactLabel = document.createElement("p");
+          addressContactContainer.appendChild(contactLabel);
+          contactLabel.innerText = " " + order.contactno;
+          contactLabel.classList = "text-sm font-normal pl-1";
+
+          const rightContainer = document.createElement("div");
+          rightContainer.classList = "flex ml-auto items-center";
+          orderContainer.append(rightContainer);
+
+          const total = document.createElement("p");
+          total.innerHTML = "Total: &#8369;" + order.subtotal;
+          total.classList = "text-xl mr-2";
+          rightContainer.append(total);
+
+          const status = document.createElement("p");
+          rightContainer.append(status);
+          status.innerHTML = order.status;
+          status.classList = "py-2 px-3 rounded-md";
+          order.status === "pending"
+            ? status.classList.add("bg-yellow-300")
+            : status.classList.add("bg-green-200");
+
+          orderContainer.addEventListener("click", async () => {
+            localStorage.setItem("current_orderid", order.orderid);
+
+            document.getElementById("detail-curtain").classList.add("hidden");
+
+            try {
+              const reponse = await axios.get(
+                `http://localhost/restapi/api/orderItems.php?orderid=${order.orderid}`
+              );
+              console.log(response.data);
+
+              var tableHtml = "";
+              for (const cartItem of reponse.data) {
+                document.getElementById("name").innerText = order.fullname;
+                document.getElementById("contactno").innerText =
+                  order.contactno;
+                document.getElementById("address").innerText = order.address;
+                document.getElementById("subtotal").innerText = order.subtotal;
+
+                tableHtml += `                    
+                    <tr class="py-8">
+                    <td class="border-x-1">${cartItem.itemname}</td>
+                    <td class="text-center border-r-1">${cartItem.qty}</td>
+                    <td class="text-center border-r-1">&#8369;${
+                      cartItem.price
+                    }</td>
+                    <td class="text-center border-r-1">&#8369;${
+                      cartItem.price * cartItem.qty
+                    }</td>
+                    </tr>`;
+              }
+              const tableItem = document.getElementById("items-table");
+              tableItem.innerHTML = tableHtml;
+
+              const proofOfPayment =
+                document.getElementById("proof-of-payment");
+
+              proofOfPayment.src = `data:$image/png;base64,${order.proof_of_payment}`;
+            } catch (e) {
+              alert("error has occurred when fecthing order items");
+              console.log(e);
+            }
+
+            document
+              .getElementById("approve-button")
+              .classList.remove("hidden");
+            if (order.status !== "pending") {
+              document.getElementById("approve-button").classList.add("hidden");
+            }
+          });
+        }
+
+        console.log(response.data);
       }
 
       getOrders();
+    </script>
+    <script>
+      document
+        .getElementById("approve-button")
+        .addEventListener("click", async () => {
+          try {
+            const response = await axios.put(
+              `http://localhost/restapi/api/orders.php?orderid=${localStorage.getItem(
+                "current_orderid"
+              )}`
+            );
+
+            alert("Approved Successfully");
+            window.location.reload();
+          } catch (e) {
+            alert("error while approving order");
+            console.log(e);
+          }
+        });
     </script>
   </body>
 </html>
