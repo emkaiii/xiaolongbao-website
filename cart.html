@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>XiaoLong Express</title>
+    <link rel="stylesheet" href="styles/header.css" />
+    <link rel="icon" href="header/logo.png" type="image/png" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss"></style>
+  </head>
+  <body>
+    <header>
+      <div class="header">
+        <div class="left-section">
+          <img class="logo" src="header/logo.png" />
+          <p>XiaoLong Express</p>
+        </div>
+
+        <div class="middle-section">
+          <div class="nav">
+            <ul>
+              <a href="xiaolong.html">
+                <li>Home</li>
+              </a>
+              <a href="menu.html">
+                <li>Menu</li>
+              </a>
+            </ul>
+          </div>
+        </div>
+
+        <div class="right-section">
+          <p></p>
+          <a href="login.html"><button class="login">Logout</button></a>
+          <a href="cart.html">
+            <svg
+              class="basket"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 576 512"
+            >
+              <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+              <path
+                d="M253.3 35.1c6.1-11.8 1.5-26.3-10.2-32.4s-26.3-1.5-32.4 10.2L117.6 192 32 192c-17.7 0-32 14.3-32 32s14.3 32 32 32L83.9 463.5C91 492 116.6 512 146 512L430 512c29.4 0 55-20 62.1-48.5L544 256c17.7 0 32-14.3 32-32s-14.3-32-32-32l-85.6 0L365.3 12.9C359.2 1.2 344.7-3.4 332.9 2.7s-16.3 20.6-10.2 32.4L404.3 192l-232.6 0L253.3 35.1zM192 304l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16s16 7.2 16 16zm96-16c8.8 0 16 7.2 16 16l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16zm128 16l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16s16 7.2 16 16z"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </header>
+    <div class="flex p-20 overflow-hidden h-[900px]">
+      <div class="w-full h-full p-8 pb-0">
+        <p class="text-4xl font-semibold">Cart items</p>
+
+        <div id="cart-items-container" class="overflow-scroll h-full"></div>
+      </div>
+      <div class="h-[800px] mt-10 w-1 bg-black"></div>
+      <div class="w-[50%] h-full p-8 pb-0" id="summary">
+        <p class="text-4xl font-semibold">Summary</p>
+        <p class="text-xl font-bold mt-8">
+          Name: <span id="name" class="font-normal">Cotton Buds</span>
+        </p>
+        <p class="text-xl font-bold mt-2">
+          Contact No:
+          <span id="contactno" class="font-normal">09935588670</span>
+        </p>
+        <p class="text-xl font-bold mt-2">
+          Address:
+          <span id="address" class="font-normal"
+            >Anywhere St. Mandaluyong City PH</span
+          >
+        </p>
+
+        <table
+          class="table-fixed w-full mt-10 border-collapse"
+          id="summary-table"
+        >
+          <thead>
+            <tr>
+              <th class="text-left border border-1">Item Name</th>
+              <th class="text-middle w-10 border border-1">Qty</th>
+              <th class="text-middle w-16 border border-1">Price</th>
+              <th class="text-middle w-16 border border-1">Total</th>
+            </tr>
+          </thead>
+          <tbody id="items-table"></tbody>
+          <tr>
+            <td class="border-x-1 border-b-1"></td>
+            <td class="text-center border-r-1 border-b-1"></td>
+            <td class="text-center border-r-1 border-b-1"></td>
+            <td class="text-center border-r-1 border-b-1"></td>
+          </tr>
+        </table>
+
+        <p class="text-xl font-bold absolute bottom-36 right-26">
+          Sub Total:
+          <span id="subtotal" class="font-normal">32</span>
+        </p>
+
+        <button
+          id="checkout-button"
+          class="overflow-hidden flex justify-center items-center h-12 bg-red-800 rounded-sm mt-10 text-white text-2xl font-medium transition-transform duration-150 active:scale-95 group absolute w-[520px] bottom-20"
+        >
+          <span
+            class="absolute inset-0 bg-black opacity-0 group-hover:opacity-[20%] transition-opacity duration-150"
+          ></span>
+          <span class="relative z-10">Checkout</span>
+        </button>
+      </div>
+    </div>
+    <div
+      id="overlay"
+      class="h-full w-full top-0 z-10 bg-black fixed bg-black opacity-[40%]"
+    ></div>
+    <div
+      id="popup"
+      class="h-full w-full top-0 z-10 fixed flex justify-center items-center"
+    >
+      <div
+        class="bg-white h-[820px] w-[600px] rounded-2xl shadow-2xl shadow-black overflow-hidden relative p-12 overflow-y-scroll"
+        style="padding-top: 32px; padding: 20px; padding-bottom: 0px"
+      >
+        <p class="text-4xl font-semibold">Summary</p>
+        <div class="flex items-center">
+          <p class="text-xl font-bold mt-8">Name:</p>
+          <textarea
+            id="name-checkout"
+            class="font-normal h-10 resize-none scrollbar-none overflow-hidden text-xl mt-10 text-left border-1 ml-4 rounded-sm pt-[2px] pl-3 w-full mr-4"
+          ></textarea>
+        </div>
+        <div class="flex items-center mt-2">
+          <p class="text-xl font-bold w-[150px]">Contact no:</p>
+          <textarea
+            id="contactno-checkout"
+            class="font-normal h-10 resize-none scrollbar-none overflow-hidden text-xl mt-2 text-left border-1 ml-4 rounded-sm pt-[2px] pl-3 w-full mr-4"
+          ></textarea>
+        </div>
+        <div class="flex items-center mt-2">
+          <p class="text-xl font-bold">Address:</p>
+          <textarea
+            id="address-checkout"
+            class="font-normal h-10 resize-none scrollbar-none overflow-hidden text-xl mt-2 text-left border-1 ml-4 rounded-sm pt-[2px] pl-3 w-full mr-4"
+          ></textarea>
+        </div>
+
+        <table
+          class="table-fixed w-full mt-10 border-collapse"
+          id="checkout-table"
+        ></table>
+
+        <p class="text-xl font-bold w-full text-right">
+          Sub Total: <span class="font-normal" id="subtotal-checkout"></span>
+        </p>
+        <div class="flex mt-10">
+          <div class="w-full">
+            <p class="w-full text-center text-lg font-semibold">Pay Here</p>
+            <img src="food-menu/gcash/gcash.png" class="w-64" />
+          </div>
+          <div class="w-full">
+            <p class="w-full text-center text-lg font-semibold">Insert Proof</p>
+            <div class="border-1 h-64">
+              <label
+                id="fileLabel"
+                class="cursor-pointer inline-block text-white rounded shadow hover:bg-grey-100 w-full h-full flex justify-center items-center"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="hidden"
+                  id="file-input"
+                />
+              </label>
+
+              <img
+                id="preview"
+                class="hidden w-full h-full object-cover rounded"
+              />
+            </div>
+          </div>
+        </div>
+        <button
+          id="place-order-button"
+          class="relative overflow-hidden flex justify-center items-center w-full h-12 bg-red-800 rounded-sm mt-10 text-white text-2xl font-medium transition-transform duration-150 active:scale-95 group mb-10"
+        >
+          <span
+            id="place-order-button-span"
+            class="absolute inset-0 bg-black opacity-0 group-hover:opacity-[20%] transition-opacity duration-150"
+          ></span>
+          <span class="relative z-10">Place Order</span>
+        </button>
+        <div
+          id="close-popup"
+          class="ml-10 text-2xl font-bold text-red-600 transform transition duration-200 hover:scale-130 active:scale-95 cursor-pointer"
+          style="position: absolute; top: 16px; right: 32px"
+        >
+          X
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const fileInput = document.getElementById("file-input");
+    const fileLabel = document.getElementById("fileLabel");
+    const preview = document.getElementById("preview");
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.classList.remove("hidden");
+        fileLabel.classList = "hidden";
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+  <script>
+    function closePopup() {
+      const overlay = document.getElementById("overlay");
+      overlay.classList =
+        "h-full w-full top-0 z-10 bg-black fixed bg-black opacity-[40%] hidden";
+
+      const popup = document.getElementById("popup");
+      popup.classList =
+        "h-full w-full top-0 z-10 fixed flex justify-center items-center hidden";
+    }
+
+    function openPopup() {
+      const overlay = document.getElementById("overlay");
+      overlay.classList =
+        "h-full w-full top-0 z-10 bg-black fixed bg-black opacity-[40%]";
+
+      const popup = document.getElementById("popup");
+      popup.classList =
+        "h-full w-full top-0 z-10 fixed flex justify-center items-center";
+    }
+
+    document
+      .getElementById("checkout-button")
+      .addEventListener("click", openPopup);
+
+    document
+      .getElementById("close-popup")
+      .addEventListener("click", closePopup);
+  </script>
+  <script>
+    async function getCart() {
+      try {
+        const response = await axios.get(
+          `http://localhost/restapi/api/cart.php?userid=${localStorage.getItem(
+            "userid"
+          )}`
+        );
+
+        const cartItemsContainer = document.getElementById(
+          "cart-items-container"
+        );
+
+        let subtotal = 0;
+        for (const cartItem of response.data) {
+          const itemContatiner = document.createElement("div");
+          itemContatiner.classList = "flex mb-5 border-b-2 py-4 items-center";
+          cartItemsContainer.appendChild(itemContatiner);
+
+          const image = document.createElement("img");
+          image.src = cartItem.img;
+          image.classList = "w-20";
+          itemContatiner.appendChild(image);
+
+          const detailsContatiner = document.createElement("div");
+          detailsContatiner.classList = "flex flex-col ml-4";
+          itemContatiner.appendChild(detailsContatiner);
+
+          const itemName = document.createElement("p");
+          itemName.innerText = cartItem.itemname;
+          itemName.classList = "text-2xl";
+          detailsContatiner.appendChild(itemName);
+
+          const qtyPriceContainer = document.createElement("div");
+          qtyPriceContainer.classList = "flex";
+
+          const qty = document.createElement("p");
+          qty.innerText = "Qty: " + cartItem.qty;
+          qtyPriceContainer.appendChild(qty);
+
+          const price = document.createElement("p");
+          price.innerHTML = "Price: &#8369;" + cartItem.price;
+          price.classList = "ml-4";
+          qtyPriceContainer.appendChild(price);
+          detailsContatiner.appendChild(qtyPriceContainer);
+
+          const rightContainer = document.createElement("div");
+          rightContainer.classList = "flex ml-auto";
+          itemContatiner.append(rightContainer);
+
+          const total = document.createElement("p");
+          total.innerHTML = "Total: &#8369;" + cartItem.price * cartItem.qty;
+          total.classList = "text-xl";
+          rightContainer.append(total);
+
+          const deleteButton = document.createElement("button");
+          deleteButton.innerText = "Remove";
+          deleteButton.classList =
+            "ml-4 mr-6 bg-red-800 text-white p-2 rounded-sm font-semibold transform transition duration-200 hover:scale-110 active:scale-95 cursor-pointer";
+          rightContainer.append(deleteButton);
+
+          deleteButton.addEventListener("click", async () => {
+            try {
+              const response = await axios.delete(
+                `http://localhost/restapi/api/cart.php?action=one&userid=${localStorage.getItem(
+                  "userid"
+                )}&cartid=${cartItem.cartid}`
+              );
+
+              alert("Cart item removed");
+              window.location.reload();
+            } catch {
+              console.log(e);
+              alert(e.response.data.message);
+            }
+          });
+
+          const tableItem = document.getElementById("items-table");
+          tableItem.innerHTML += `                    
+            <tr class="py-8">
+              <td class="border-x-1">${cartItem.itemname}</td>
+              <td class="text-center border-r-1">${cartItem.qty}</td>
+              <td class="text-center border-r-1">&#8369;${cartItem.price}</td>
+              <td class="text-center border-r-1">&#8369;${
+                cartItem.price * cartItem.qty
+              }</td>
+            </tr>`;
+          subtotal += cartItem.price * cartItem.qty;
+        }
+
+        document.getElementById("checkout-table").innerHTML =
+          document.getElementById("summary-table").innerHTML;
+
+        document.getElementById("subtotal").innerHTML = "&#8369;" + subtotal;
+        document.getElementById("subtotal-checkout").innerHTML =
+          "&#8369;" + subtotal;
+      } catch (e) {
+        console.log(e);
+        alert(e.response.data.message);
+      }
+    }
+
+    getCart();
+  </script>
+  <script>
+    async function getUser() {
+      try {
+        const response = await axios.get(
+          `http://localhost/restapi/api/users.php?userid=${localStorage.getItem(
+            "userid"
+          )}`
+        );
+
+        document.getElementById("name").innerText = response.data.fullname;
+        document.getElementById("contactno").innerText =
+          response.data.contactno;
+        document.getElementById("address").innerText = response.data.address;
+
+        document.getElementById("name-checkout").value = response.data.fullname;
+        document.getElementById("contactno-checkout").value =
+          response.data.contactno;
+        document.getElementById("address-checkout").value =
+          response.data.address;
+      } catch (e) {
+        console.log(e);
+        alert(e.response.data.message);
+      }
+    }
+
+    getUser();
+  </script>
+  <script>
+    async function getCartDetails() {
+      try {
+        const response = await axios.get(
+          `http://localhost/restapi/api/cart.php?userid=${localStorage.getItem(
+            "userid"
+          )}`
+        );
+
+        var total = 0;
+        for (const cartItem of response.data) {
+          total += parseInt(cartItem.price) * parseInt(cartItem.qty);
+        }
+
+        const cartItems = response.data;
+        cartItems.forEach((item) => {
+          item.total = parseInt(item.price) * parseInt(item.qty);
+          item.price = parseInt(item.price);
+          item.qty = parseInt(item.qty);
+        });
+        return [cartItems, total];
+      } catch (e) {
+        console.log(e);
+        alert(e.response.data.message);
+      }
+    }
+
+    async function getProofOfPayment() {
+      const fileInput = document.getElementById("file-input");
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("No file selected");
+        return null;
+      }
+
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const base64String = e.target.result;
+          resolve(base64String);
+        };
+
+        reader.onerror = function (error) {
+          reject(error);
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function setupAddOrderButton() {
+      document
+        .getElementById("place-order-button-span")
+        .addEventListener("click", async () => {
+          var userid = null;
+          var fullname = null;
+          var contactno = null;
+          var address = null;
+          var proof = null;
+          var total = 0;
+          var items = [];
+
+          userid = localStorage.getItem("userid");
+          fullname = document.getElementById("name-checkout").value;
+          contactno = document.getElementById("contactno-checkout").value;
+          address = document.getElementById("address-checkout").value;
+          [items, total] = await getCartDetails();
+
+          proof = await getProofOfPayment();
+
+          if (proof == null) {
+            alert("Please insert proof of payment");
+            return;
+          }
+
+          const data = {
+            userid,
+            fullname,
+            contactno,
+            address,
+            total,
+            items,
+            proof,
+          };
+          console.log(data);
+
+          try {
+            const response = await axios.post(
+              "http://localhost/restapi/api/orders.php",
+              data
+            );
+
+            console.log(response);
+
+            alert("Order successfully added");
+            window.location.reload();
+          } catch (e) {
+            alert("Error while sending order");
+            console.log(e);
+          }
+        });
+    }
+
+    setupAddOrderButton();
+  </script>
+</html>

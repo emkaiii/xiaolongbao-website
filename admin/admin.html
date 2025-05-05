@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss"></style>
+  </head>
+  <body>
+    <div class="h-screen w-full overflow-hidden flex p-10">
+      <div class="flex flex-1 h-full p-10">
+        <p class="text-4xl font-bold">Orders</p>
+        <div id="order-list-container"></div>
+      </div>
+
+      <div class="flex w-[40%] h-full bg-blue-500 mb-10"></div>
+    </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      async function getOrders() {
+        const response = await axios.get()
+      }
+
+      getOrders();
+    </script>
+  </body>
+</html>

@@ -37,16 +37,22 @@
         <div class="right-section">
           <p></p>
           <a href="login.html"><button class="login">Logout</button></a>
-          <svg
-            class="basket"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 576 512"
-          >
-            <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-            <path
-              d="M253.3 35.1c6.1-11.8 1.5-26.3-10.2-32.4s-26.3-1.5-32.4 10.2L117.6 192 32 192c-17.7 0-32 14.3-32 32s14.3 32 32 32L83.9 463.5C91 492 116.6 512 146 512L430 512c29.4 0 55-20 62.1-48.5L544 256c17.7 0 32-14.3 32-32s-14.3-32-32-32l-85.6 0L365.3 12.9C359.2 1.2 344.7-3.4 332.9 2.7s-16.3 20.6-10.2 32.4L404.3 192l-232.6 0L253.3 35.1zM192 304l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16s16 7.2 16 16zm96-16c8.8 0 16 7.2 16 16l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16zm128 16l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16s16 7.2 16 16z"
-            />
-          </svg>
+          <a href="cart.html">
+            <div
+              id="cart-count"
+              class="bg-red-800 w-4 h-4 rounded-full absolute top-[10px] right-[70px] flex justify-center items-center text-white text-sm"
+            ></div>
+            <svg
+              class="basket"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 576 512"
+            >
+              <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+              <path
+                d="M253.3 35.1c6.1-11.8 1.5-26.3-10.2-32.4s-26.3-1.5-32.4 10.2L117.6 192 32 192c-17.7 0-32 14.3-32 32s14.3 32 32 32L83.9 463.5C91 492 116.6 512 146 512L430 512c29.4 0 55-20 62.1-48.5L544 256c17.7 0 32-14.3 32-32s-14.3-32-32-32l-85.6 0L365.3 12.9C359.2 1.2 344.7-3.4 332.9 2.7s-16.3 20.6-10.2 32.4L404.3 192l-232.6 0L253.3 35.1zM192 304l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16s16 7.2 16 16zm96-16c8.8 0 16 7.2 16 16l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16zm128 16l0 96c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-96c0-8.8 7.2-16 16-16s16 7.2 16 16z"
+              />
+            </svg>
+          </a>
         </div>
       </div>
     </header>
@@ -411,6 +417,7 @@
           >
             <p>qty</p>
             <textarea
+              id="qty"
               class="border border-2 resize-none h-[100px] w-[100px] flex justify-center text-center text-3xl mt-10"
               style="padding-top: 25px"
               rows="1"
@@ -436,6 +443,7 @@
       </div>
     </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     const userid = localStorage.getItem("userid");
     if (!userid) {
@@ -480,10 +488,6 @@
         const price = card.querySelector(".item-price").textContent.trim();
         const imageSrc = card.querySelector("img").src;
 
-        console.log("Name:", name);
-        console.log("Price:", price);
-        console.log("Image Source:", imageSrc);
-
         const popupName = document.getElementById("popup-item-name");
         popupName.innerText = name;
 
@@ -497,9 +501,60 @@
       });
     });
 
+    const addToCartButton = document.getElementById("add-to-cart-button");
+    addToCartButton.addEventListener("click", async () => {
+      const popupName = document.getElementById("popup-item-name");
+      const popupPrice = document.getElementById("popup-item-price");
+      const popupItemImg = document.getElementById("popup-item-img");
+      const qtyText = document.getElementById("qty");
+
+      const userid = localStorage.getItem("userid");
+      const itemname = popupName.innerText;
+      const price = parseInt(popupPrice.innerText.slice(1));
+      const qty = parseInt(qtyText.value);
+      const img = popupItemImg.src;
+
+      if (Number.isNaN(qty)) {
+        alert("Invalid qty");
+      }
+
+      const data = { userid, itemname, price, qty, img };
+
+      try {
+        const response = await axios.post(
+          "http://localhost/restapi/api/cart.php",
+          data
+        );
+
+        console.log(response.data);
+        alert("Successfully added to cart");
+        window.location.reload();
+      } catch (e) {
+        console.log(e);
+        alert(e.response.data.message);
+      }
+    });
+
     const closePopupButton = document.getElementById("close-popup");
     closePopupButton.addEventListener("click", () => {
       closePopup();
     });
+  </script>
+  <script>
+    async function updateCartNumber() {
+      try {
+        const userid = localStorage.getItem("userid");
+        const response = await axios.get(
+          `http://localhost/restapi/api/cart.php?userid=${userid}`
+        );
+
+        const cartNumber = response.data.length;
+        document.getElementById("cart-count").innerText = cartNumber;
+      } catch {
+        console.log(e);
+        alert(e.response.data.message);
+      }
+    }
+    updateCartNumber();
   </script>
 </html>
