@@ -71,8 +71,37 @@
         </button>
       </div>
     </div>
+    <div
+      id="overlay"
+      class="h-full w-full top-0 z-20 bg-black fixed bg-black opacity-[40%] hidden"
+    ></div>
+    <div
+      id="popup"
+      class="h-full w-full top-0 z-30 fixed flex justify-center items-center hidden"
+    >
+      <img id="preview-zoomed" />
+      <div
+        id="close-popup"
+        class="ml-10 text-2xl font-bold text-red-600 transform transition duration-200 hover:scale-130 active:scale-95 cursor-pointer"
+        style="position: absolute; top: 16px; right: 32px"
+      >
+        X
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+      document
+        .getElementById("proof-of-payment")
+        .addEventListener("click", () => {
+          document.getElementById("overlay").classList.remove("hidden");
+          document.getElementById("popup").classList.remove("hidden");
+        });
+
+      document.getElementById("close-popup").addEventListener("click", () => {
+        document.getElementById("overlay").classList.add("hidden");
+        document.getElementById("popup").classList.add("hidden");
+      });
+
       async function getOrders() {
         var response;
         try {
@@ -173,8 +202,10 @@
 
               const proofOfPayment =
                 document.getElementById("proof-of-payment");
+              const previewZoomed = document.getElementById("preview-zoomed");
 
               proofOfPayment.src = `data:$image/png;base64,${order.proof_of_payment}`;
+              previewZoomed.src = `data:$image/png;base64,${order.proof_of_payment}`;
             } catch (e) {
               alert("error has occurred when fecthing order items");
               console.log(e);

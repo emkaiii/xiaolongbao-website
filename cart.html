@@ -473,11 +473,22 @@
             console.log(response);
 
             alert("Order successfully added");
-            window.location.reload();
           } catch (e) {
             alert("Error while sending order");
             console.log(e);
           }
+
+          try {
+            const response = await axios.delete(
+              `http://localhost/restapi/api/cart.php?&userid=${localStorage.getItem(
+                "userid"
+              )}`
+            );
+          } catch (e) {
+            alert("Error while deleting cart. Order Successfully added.");
+            console.log(e);
+          }
+          window.location.reload();
         });
     }
 

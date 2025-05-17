@@ -67,7 +67,7 @@
 
         if (email === "admin@gmail.com" && password === "admin123") {
           localStorage.setItem("userid", -1);
-          window.location.href = "/admin.html";
+          window.location.href = "/admin/admin.html";
         } else {
           console.log(e);
           alert(e.response.data.message);
