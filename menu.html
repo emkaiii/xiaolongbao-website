@@ -7,11 +7,7 @@
     <link rel="stylesheet" href="styles/menu.css" />
     <link rel="icon" href="header/logo.png" type="image/png" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
-        --color-clifford: #da373d;
-      }
-    </style>
+    <style type="text/tailwindcss"></style>
   </head>
   <body>
     <header>
@@ -36,7 +32,7 @@
 
         <div class="right-section">
           <p></p>
-          <a href="login.html"><button class="login">Logout</button></a>
+          <button id="logout-button" class="login">Logout</button>
           <a href="cart.html">
             <div
               id="cart-count"
@@ -556,5 +552,10 @@
       }
     }
     updateCartNumber();
+
+    document.getElementById("logout-button").addEventListener("click", () => {
+      localStorage.removeItem("use0rid");
+      window.location.replace("/login.html");
+    });
   </script>
 </html>
